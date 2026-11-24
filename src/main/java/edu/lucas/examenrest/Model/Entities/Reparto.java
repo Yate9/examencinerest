@@ -30,6 +30,9 @@ public class Reparto {
     @JoinColumn(name = "actor_id", nullable = false)
     private Actor actor;
 
+    protected Reparto() {
+    }
+
     public Reparto(String personaje, double salario, Pelicula pelicula, Actor actor) {
         this.personaje = personaje;
         this.salario = salario;

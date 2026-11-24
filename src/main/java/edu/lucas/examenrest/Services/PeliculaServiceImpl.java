@@ -24,6 +24,7 @@ public class PeliculaServiceImpl implements IPeliculaService {
 
     @Override
     public PeliculaDetalleDTO create(PeliculaRequestDTO dto) {
+        validarPelicula(dto);
         Pelicula pelicula = new Pelicula();
         aplicarDatos(pelicula, dto);
 
@@ -64,9 +65,28 @@ public class PeliculaServiceImpl implements IPeliculaService {
     @Override
     @Transactional
     public PeliculaDetalleDTO update(Long id, PeliculaRequestDTO dto) {
+        validarPelicula(dto);
         Pelicula pelicula = buscarPelicula(id);
         aplicarDatos(pelicula, dto);
         return convertirADetalle(pelicula);
+    }
+
+    private void validarPelicula(PeliculaRequestDTO dto) {
+        if (dto == null) {
+            throw new IllegalArgumentException("Los datos de la pelicula son obligatorios.");
+        }
+        if (dto.titulo() == null || dto.titulo().isBlank()) {
+            throw new IllegalArgumentException("El titulo es obligatorio.");
+        }
+        if (dto.director() == null || dto.director().isBlank()) {
+            throw new IllegalArgumentException("El director es obligatorio.");
+        }
+        if (dto.anio() < 1888) {
+            throw new IllegalArgumentException("El año debe ser 1888 o posterior.");
+        }
+        if (dto.duracion() <= 0) {
+            throw new IllegalArgumentException("La duracion debe ser mayor que 0.");
+        }
     }
 
     private void aplicarDatos(Pelicula pelicula, PeliculaRequestDTO dto) {
