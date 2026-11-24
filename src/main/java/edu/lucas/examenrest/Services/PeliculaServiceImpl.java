@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.lucas.examenrest.Model.DTO.PeliculaDetalleDTO;
-import edu.lucas.examenrest.Model.DTO.PeliculaListadoDTO;
-import edu.lucas.examenrest.Model.DTO.PeliculaRequestDTO;
-import edu.lucas.examenrest.Model.DTO.RepartoDTO;
+import edu.lucas.examenrest.dto.PeliculaDetalleDTO;
+import edu.lucas.examenrest.dto.PeliculaListadoDTO;
+import edu.lucas.examenrest.dto.PeliculaRequestDTO;
+import edu.lucas.examenrest.dto.RepartoDTO;
 import edu.lucas.examenrest.Model.Entities.Pelicula;
 import edu.lucas.examenrest.Model.Repositories.IPeliculaRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -24,11 +24,11 @@ public class PeliculaServiceImpl implements IPeliculaService {
 
     @Override
     public PeliculaDetalleDTO create(PeliculaRequestDTO dto) {
-        validarPelicula(dto);
+        validarPelicula(null);
         Pelicula pelicula = new Pelicula();
         aplicarDatos(pelicula, dto);
 
-        Pelicula guardada = peliculaRepository.save(pelicula);
+        Pelicula guardada = guardarPelicula(pelicula);
         return new PeliculaDetalleDTO(guardada.getId(), guardada.getTitulo(), guardada.getDirector(),
                 guardada.getAnio(), guardada.getDuracion(), List.of());
     }
@@ -68,7 +68,11 @@ public class PeliculaServiceImpl implements IPeliculaService {
         validarPelicula(dto);
         Pelicula pelicula = buscarPelicula(id);
         aplicarDatos(pelicula, dto);
-        return convertirADetalle(pelicula);
+        return convertirADetalle(guardarPelicula(pelicula));
+    }
+
+    private Pelicula guardarPelicula(Pelicula pelicula) {
+        return peliculaRepository.saveAndFlush(pelicula);
     }
 
     private void validarPelicula(PeliculaRequestDTO dto) {
@@ -85,7 +89,7 @@ public class PeliculaServiceImpl implements IPeliculaService {
             throw new IllegalArgumentException("El año debe ser 1888 o posterior.");
         }
         if (dto.duracion() <= 0) {
-            throw new IllegalArgumentException("La duracion debe ser mayor que 0.");
+            throw new IllegalArgumentException("La duracion debe mayor que 0.");
         }
     }
 
@@ -98,7 +102,6 @@ public class PeliculaServiceImpl implements IPeliculaService {
 
     private Pelicula buscarPelicula(Long id) {
         return peliculaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("No se pudo encontro la pelicula con id " + id));
+                .orElseThrow(() -> new EntityNotFoundException("No se encontró la película con el id: " + id));
     }
-
 }

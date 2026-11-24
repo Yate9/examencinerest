@@ -1,4 +1,4 @@
-package edu.lucas.examenrest.Model.DTO;
+package edu.lucas.examenrest.dto;
 
 import java.util.List;
 

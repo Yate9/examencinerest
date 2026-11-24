@@ -1,4 +1,4 @@
-package edu.lucas.examenrest.Model.DTO;
+package edu.lucas.examenrest.dto;
 
 public record PeliculaListadoDTO(Long id, String titulo, String director, int anio) {
 

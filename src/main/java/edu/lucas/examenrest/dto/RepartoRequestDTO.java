@@ -1,4 +1,4 @@
-package edu.lucas.examenrest.Model.DTO;
+package edu.lucas.examenrest.dto;
 
 public record RepartoRequestDTO(Long actorId, String personaje, double salario) {
 

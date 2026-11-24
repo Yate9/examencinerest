@@ -2,9 +2,9 @@ package edu.lucas.examenrest.Services;
 
 import java.util.List;
 
-import edu.lucas.examenrest.Model.DTO.PeliculaDetalleDTO;
-import edu.lucas.examenrest.Model.DTO.PeliculaListadoDTO;
-import edu.lucas.examenrest.Model.DTO.PeliculaRequestDTO;
+import edu.lucas.examenrest.dto.PeliculaDetalleDTO;
+import edu.lucas.examenrest.dto.PeliculaListadoDTO;
+import edu.lucas.examenrest.dto.PeliculaRequestDTO;
 
 public interface IPeliculaService {
     PeliculaDetalleDTO create(PeliculaRequestDTO dto);
